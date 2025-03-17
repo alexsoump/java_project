@@ -1,0 +1,226 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+abstract class Card{
+    # palace : Palaces
+    + Card( palace : Palaces)
+    + getPalace() : Palaces
+    + applyEffect(board : Board, currentPlayer : Player, currentRound : Round) : void
+}
+
+class NumberCard extends Card{
+    - value : int
+    + NumberCard( value : int, palace : Palaces)
+    + getValue() : int
+}
+
+class SpecialCard extends Card{
+    + SpecialCard(palace : Palaces)
+}
+
+class Ariadne extends SpecialCard {
+  + value : int
+  + Ariadne(palace : Palaces)
+  + toString() : String
+}
+
+class Minotaur extends SpecialCard {
+  + Minotaur(palace : Palaces)
+  + toString() : String
+}
+
+enum Palaces {
+  Knossos
+  Malia
+  Phaistos
+  Zakros
+}
+
+class Board {
+  + Position[][] Paths
+  + Deck cardDeck
+  + NumberCard[][] lastPlayed
+  - Finding[] findingsArray
+  - int[] positionPoints
+  - int discardedCount
+  + Board()
+  - ShuffleFindings() : void
+  + fillPaths() : void
+}
+
+class Deck {
+  - top : int
+  + Deck()
+  - Card[] cards
+  - initDeck() : void
+  + popDeck() : Card
+  + getCardNumber() : int
+}
+
+abstract class Finding {
+  - points : int
+  + getPoints() : int
+}
+
+class Mural extends Finding {
+  - points : int
+  - type : Murals
+  + Mural(type : Murals)
+  + getPoints() : int
+  + getType() : Murals
+  + toString() : String
+}
+
+class SpecialFinding extends Finding {
+  - points : int
+  - type : SpecialFindings
+  + SpecialFinding(type : SpecialFindings)
+  + getPoints() : int
+  + getType() : SpecialFindings
+  + toString() : String
+}
+
+class SnakeGoddess extends Finding {
+  + SnakeGoddess()
+  + toString() : String
+}
+
+enum Murals {
+  HappyMan
+  OnTheBull
+  ThreeWomen
+  TwoGuys
+  FourDolphins
+  WomanPortrait
+}
+
+enum SpecialFindings {
+  DiskosFaistou
+  DaxtylidiMinwa
+  KosmhmaMaliwn
+  RytoXakrou
+}
+
+class Pawn{
+    - palace : Palaces
+    - position : int
+    - isHidden : boolean
+    - isPlaced : boolean
+    + Pawn()
+    + reveal() : void
+    + IsHidden() : boolean
+    + setPlaced() : void
+    + moveBy( spaces : int) void
+    + getPosition() : int
+    + setPosition(pos : int) : void
+    + getPalace() : Palaces
+    + setPalace(pal : Palaces) : void
+    + getScore() : int
+}
+
+class Archaeologist extends Pawn{
+    + Archaeologist()
+}
+
+class Theseus extends Pawn{
+    - beenHit : boolean
+    + Theseus()
+    + destroyFinding(finding : Finding) : void
+    + isBeenHit() : boolean
+    + setBeenHit(beenHit : boolean) : void
+}
+
+class Player{
+    - name : String
+    + playerIndex : int
+    - score : int
+    + pawns : Pawn[]
+    - findings : ArrayList<Finding>
+    - hand : Card[]
+    - lastCardPlayed : Card[]
+    + Player()
+    + getName() : String
+    + addScore(score : int) : void
+    + getScore() : int
+    + addCardToHand(card : Card) : void
+    + chooseCard(index : int) : Card
+    + setHand(card : Card) : void
+    + setLastCardPlayed(card : Card) : void
+    + getLastCard(player : Player, palace : Palaces) : Card
+    + rejectCard(card : Card) : Card
+    + movePawn(card : Card) : void
+    + addFinding(finding : Finding) : void
+    + getPawnForPath(i : int) : Pawn
+    + hasCard(card : Card) : int
+    + calculateScore() : void
+    + hasSpecial(finding : SpecialFinding) : boolean
+    + getSnakeGoddessCount() : int
+    + getFrescoes() : ArrayList
+    + getSpecialFindings() : ArrayList
+    + getSnakeGoddesses() : ArrayList
+}
+
+class Position{
+    - score : int
+    + Position()
+    + getScore() : int
+    + setScore(score : int) : void
+}
+
+class SimplePosition extends Position{
+    + SimplePosition()
+}
+
+class FindingPosition extends Position{
+    - isFindingAvailable : boolean
+    - findingStored : Finding
+    + FindingPosition(finding : Finding)
+    + getFinding() : Finding
+    + destroyFinding() : void
+}
+
+class Round{
+    - currentPlayer : Player
+    - players : Player[]
+    - board : Board
+    - p1Played : boolean
+    - p1Played : boolean
+    + Round(players : Player[], board : Board)
+    + startRound() : void
+    + getCurrentPlayer : Player
+    - playTurn() : void
+    - changeTurn() : void
+    + attackOpponent(mino : Minotaur) : void
+    - fillHands(deck : Deck, player1 : Player, player2 : Player) : void
+    + completeHand(deck : Deck, P : Player) : void
+    - endRound() : void
+    - isRoundOver() : boolean
+}
+
+class controller{
+    - view : GraphicUI
+    - frescoesFrame : frescoesWindow
+    - Players[] : Player
+    - board : Board
+    - round : Round
+    - currentPlayerIndex : int
+    - clip : Clip
+    + Controller()
+    - createPlayers() : Player[]
+    - shareCards() : void
+    - setUpListeners() : void
+    - handleCardClick(playerIndex : int, cardIndex : int) : void
+    - handleRightClick(playerIndex : int, cardIndex : int) : void
+    - showFrescoes(playerIndex : int) : void
+    - playMusic( filepath : String) : void
+    - determineWinner() : void
+    - updateUI() : void
+
+}
+
+
+
+
+
+
+
+@enduml
