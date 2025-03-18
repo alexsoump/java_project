@@ -1,2 +1,2 @@
 # java_project
-Simple board game - unfinished
+Simple board game 
